@@ -11,8 +11,7 @@ export const useGetList = () => {
   useEffect(() => {
     const getListOfAnimal = async () => {
       try {
-        const listOfAnimal = (await axiosInstance.get("/")).data.TbAdpWaitAnimalView.row;
-        console.log(listOfAnimal);
+        const { data: listOfAnimal } = await axiosInstance.get("/api/list");
         dispatch(setAnimalList(listOfAnimal));
       } catch (error) {
         console.error(error);
@@ -24,18 +23,4 @@ export const useGetList = () => {
   const animalList = useSelector((state) => state.animalList);
 
   return { animalList, dispatch };
-};
-
-export const fetchAnimalPhotos = async (animal_NO) => {
-  try {
-    const response = await axios.get(
-      `http://openapi.seoul.go.kr:8088/6b53454b47616d6934344d7a585076/json/TbAdpWaitAnimalPhotoView/1/5/?STAGE_SN=2&fileNm=${animal_NO}`
-    );
-    const photos = response.data.TbAdpWaitAnimalPhotoView.row;
-    console.log(photos);
-    return photos;
-    // photos는 5개 url 담긴 배열!
-  } catch (error) {
-    console.error(error);
-  }
 };
