@@ -18,43 +18,51 @@ const TitleListAnimal = () => {
     return result;
   };
 
-  // 더 보러가기 버튼 핸들링 함수
-  const handleMoreInfoClick = (id) => {
+  // 상세 페이지 핸들링 함수
+  const handleDetailPageClick = (id) => {
     navigate(`/api/detail/${id}`);
   };
-  const moreInfoBtn = { title: "더 보러가기", purpose: "more info" };
+
+  // 더 보러가기 핸들링 함수
+  const handleMoreInfoClick = () => {
+    navigate("/api/list");
+  };
+
+  // 더 보러가기 버튼 props
+  const moreInfoBtn = { title: "더 많은 유기동물 보기", purpose: "more info" };
+
   return (
-    <main style={{ position: "relative" }}>
+    <main>
       <StMainTxt>
         <StTitleTxt>함께하개</StTitleTxt>에서 평생의 행복을 함께할 가족을 찾아보세요.
       </StMainTxt>
       {selectedList.map((animal) => {
         return (
           <StContainer
-            key={animal.ANIMAL_NO}
-            onClick={() => handleMoreInfoClick(animal.ANIMAL_NO)}
+            key={animal.animalNo}
+            onClick={() => handleDetailPageClick(animal.animalNo)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleMoreInfoClick(animal.ANIMAL_NO);
+                handleDetailPageClick(animal.animalNo);
               }
             }}
           >
-            <StTitleImg src="animal.images[0]" alt="동물사진1" />
+            <StTitleImg src={`https://${animal.images[0].imageUrl}`} alt="동물 프로필 사진" />
             <StContainerInfo>
-              <StTxtInfo>이름 : {animal.NM}</StTxtInfo>
-              <StTxtInfo>나이 : {getCleanAge(animal.AGE)}</StTxtInfo>
-              <StTxtInfo>성별 : {animal.SEXDSTN === "M" ? "수컷" : "암컷"}</StTxtInfo>
+              <StTxtInfo>이름 : {animal.name}</StTxtInfo>
+              <StTxtInfo>나이 : {getCleanAge(animal.age)}</StTxtInfo>
+              <StTxtInfo>성별 : {animal.sex === "M" ? "수컷" : "암컷"}</StTxtInfo>
               <StTxtInfo>
-                종 : {animal.SPCS} / {animal.BREEDS}
+                종 : {animal.species} / {animal.breed}
               </StTxtInfo>
             </StContainerInfo>
           </StContainer>
         );
       })}
       <StButtonWrapper>
-        <Button button={moreInfoBtn} />
+        <Button button={moreInfoBtn} onClickHandle={handleMoreInfoClick} />
       </StButtonWrapper>
       <StFootPrint src={dogFootPrint} />
     </main>
@@ -67,21 +75,25 @@ const StContainer = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  margin: 0 200px;
+  margin: 0 auto;
   margin-bottom: 20px;
   padding: 0 20px;
   border-radius: 10px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   transition: all 0.3s ease-in-out;
+  background-color: #fff8f0d1;
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
       rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
     cursor: pointer;
   }
+  @media screen and (min-width: 920px) {
+    max-width: 750px;
+  }
 `;
 
 const StMainTxt = styled.h2`
-  margin-bottom: 40px;
+  margin: 140px 0 40px;
   font-weight: 500;
   @media screen and (min-height: 980px) {
     margin-bottom: 90px;
@@ -93,13 +105,12 @@ const StTitleTxt = styled.span`
   color: #ffab1a;
 `;
 
-const StTitleImg = styled.image`
+const StTitleImg = styled.img`
   width: 150px;
   height: 120px;
   border: 1px solid #e1e1e1;
   margin: 10px;
   box-sizing: border-box;
-  background-color: #242424;
 `;
 
 const StContainerInfo = styled.div`
@@ -109,6 +120,9 @@ const StContainerInfo = styled.div`
   align-items: space-around;
   margin-left: 30px;
   justify-content: center;
+  @media screen and (max-width: 790px) {
+    min-width: 140px;
+  }
 `;
 
 const StTxtInfo = styled.p`
@@ -116,9 +130,10 @@ const StTxtInfo = styled.p`
 `;
 
 const StButtonWrapper = styled.div`
-  position: absolute;
-  bottom: -30px;
-  right: 17%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 0 30px;
+  box-sizing: border-box;
 `;
 
 const StFootPrint = styled.img`
@@ -126,6 +141,11 @@ const StFootPrint = styled.img`
   height: 160px;
   position: absolute;
   bottom: -20px;
-  right: 10%;
+  right: 20%;
   transform: rotate(344deg);
+  @media screen and (max-width: 790px) {
+    max-width: 100px;
+    max-height: 100px;
+    right: 25%;
+  }
 `;
