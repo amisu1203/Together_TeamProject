@@ -2,19 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useGetList } from "../hooks/useFetchs";
+import Header from "../components/Header";
+import useToggle from "../hooks/useToggle";
 
 const DetailPage = () => {
   const navigate = useNavigate();
-  const { animalList, dispatch } = useGetList();
-  console.log(animalList);
   const { id } = useParams();
-  const selectedAnimal = animalList.filter((animal) => animal.ANIMAL_NO === parseInt(id));
+  const [isToggled, handleToggle, setToggled] = useToggle();
+  const { animalList, dispatch } = useGetList();
 
-  if (!selectedAnimal) {
-    return <div>로딩중입니다...</div>;
-  }
+  // 동물 리스트 중 랜덤 3마리 뽑는 로직
+  const selectedAnimal = animalList.filter((animal) => animal.animalNo === parseInt(id));
 
   // 임시보호 내용 문자열 필터링 함수
   const filterText = (data) => {
@@ -33,36 +32,61 @@ const DetailPage = () => {
   // 상담 신청 버튼 prop
   const applyBtn = { title: "상담 신청하기" };
 
-  // const handleApplyConsult = (id) => {};
+  // 상담 신청 버튼 클릭 핸들러
+  const handleApplyClick = () => {
+    navigate("/api/consulting");
+  };
+
+  // 로딩중일 때
+  if (!selectedAnimal) {
+    return <div>로딩중입니다...</div>;
+  }
 
   return (
-    <article>
-      <StVisuallyHidden>유기 동물 상세페이지 입니다.</StVisuallyHidden>
-      <img src="" alt="동물 프로필 사진" />
-      {selectedAnimal.map((animal) => {
-        return (
-          <div key={animal.ANIMAL_NO}>
-            <div>
-              <p>이름 : {animal.ANIMAL_NO}</p>
-              <p>성별 : {animal.SEXDSTN === "M" ? "수컷" : "암컷"}</p>
-              <p>
-                종 / 품종 :{animal.SPCS}/{animal.BREEDS}
-              </p>
-              <p>나이 : {getCleanAge(animal.AGE)}</p>
-              <p>체중 : {animal.BDWGH}</p>
-            </div>
-            <div>
-              <p>입양 상태 : {animal.ADP_STTUS}</p>
-              <p>입소 날짜 : {animal.ENTRNC_DATE}</p>
-              <p>임시 보호 상태 : {animal.TMPR_PRTC_STTUS}</p>
-              <p>임시 보호 내용: {filterText(animal.TMPR_PRTC_CN)}</p>
-              <p>동물 번호 : {animal.ANIMAL_NO}</p>
-            </div>
-          </div>
-        );
-      })}
-      <Button button={applyBtn} />
-    </article>
+    <div>
+      <Header />
+      <article>
+        <StVisuallyHidden>유기 동물 상세페이지 입니다.</StVisuallyHidden>
+        {selectedAnimal.map((animal) => {
+          return (
+            <StContainer key={animal.animalNo}>
+              <StImgContainer>
+                <StTitleImg src={`https://${animal.images[0].imageUrl}`} alt="유기동물 프로필" />
+              </StImgContainer>
+              <StInfoContainer>
+                {/* <button>{isToggled ? "⬆️" : "⬇️"}</button> */}
+                {isToggled ? (
+                  <StInfoContainerRigth>
+                    <p>동물 번호 : {animal.animalNo}</p>
+                    <p>입양 상태 : {animal.adpStatus}</p>
+                    <p>입소 날짜 : {animal.entrance_date}</p>
+                    <p>임시 보호 내용: {filterText(animal.tmpr)}</p>
+                    {!animal.introduceUrl ? null : (
+                      <a href={animal.introduceUrl} target="_blank" rel="noopener noreferrer">
+                        동영상으로 만나보세요!
+                      </a>
+                    )}
+                    <button onClick={handleToggle}>⬅️</button>
+                  </StInfoContainerRigth>
+                ) : (
+                  <StInfoContainerLeft>
+                    <p>이름 : {animal.name}</p>
+                    <p>성별 : {animal.sex === "M" ? "수컷" : "암컷"}</p>
+                    <p>
+                      종 / 품종 : {animal.species}/{animal.breed}
+                    </p>
+                    <p>나이 : {getCleanAge(animal.age)}</p>
+                    <p>체중 : {`${animal.weight}kg`}</p>
+                    <button onClick={handleToggle}>➡️</button>
+                  </StInfoContainerLeft>
+                )}
+              </StInfoContainer>
+            </StContainer>
+          );
+        })}
+        <Button button={applyBtn} onClickHandle={handleApplyClick} />
+      </article>
+    </div>
   );
 };
 
@@ -78,4 +102,48 @@ const StVisuallyHidden = styled.h1`
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+`;
+
+const StContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 180px;
+`;
+
+const StTitleImg = styled.img`
+  display: block;
+  width: 400px;
+  height: 280px;
+`;
+const StImgContainer = styled.div`
+  border-radius: 200px 200px 0px 0px;
+  border: 12px solid rgb(17 57 113 / 19%);
+  overflow: hidden;
+  box-shadow: blue 0px 0px 0px 2px inset, rgb(255, 255, 255) 10px -10px 0px -3px, rgb(31, 193, 27) 10px -10px, rgb(255, 255, 255) 20px -20px 0px -3px,
+    rgb(255, 217, 19) 20px -20px, rgb(255, 255, 255) 30px -30px 0px -3px, rgb(255, 156, 85) 30px -30px, rgb(255, 255, 255) 40px -40px 0px -3px,
+    rgb(255, 85, 85) 40px -40px;
+  margin-bottom: 50px;
+`;
+
+const StInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  /* border: 1px solid red; */
+  text-align: left;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin-bottom: 100px;
+  border: 1px solid gray;
+  align-items: center;
+`;
+
+const StInfoContainerLeft = styled.div`
+  width: 50%;
+`;
+
+const StInfoContainerRigth = styled.div`
+  width: 50%;
 `;
