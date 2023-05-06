@@ -10,15 +10,20 @@ export const useGetList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const getListOfAnimal = async () => {
-      const listOfAnimal = (await axiosInstance.get("/")).data.TbAdpWaitAnimalView.row;
-      dispatch(setAnimalList(listOfAnimal));
+      try {
+        const listOfAnimal = (await axiosInstance.get("/")).data.TbAdpWaitAnimalView.row;
+        console.log(listOfAnimal);
+        dispatch(setAnimalList(listOfAnimal));
+      } catch (error) {
+        console.error(error);
+      }
     };
     getListOfAnimal();
   }, [dispatch]);
 
   const animalList = useSelector((state) => state.animalList);
 
-  return [animalList, dispatch];
+  return { animalList, dispatch };
 };
 
 export const fetchAnimalPhotos = async (animal_NO) => {
