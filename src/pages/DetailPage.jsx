@@ -3,11 +3,12 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useGetList } from "../hooks/useFetchHooks";
+import { useGetList } from "../hooks/useFetchs";
 
 const DetailPage = () => {
   const navigate = useNavigate();
-  const [animalList, dispatch] = useGetList();
+  const { animalList, dispatch } = useGetList();
+  console.log(animalList);
   const { id } = useParams();
   const selectedAnimal = animalList.filter((animal) => animal.ANIMAL_NO === parseInt(id));
 
@@ -15,6 +16,7 @@ const DetailPage = () => {
     return <div>로딩중입니다...</div>;
   }
 
+  // 임시보호 내용 문자열 필터링 함수
   const filterText = (data) => {
     const pattern = /<[^>]*>/g;
     let result = data.replace(pattern, "");
@@ -22,8 +24,16 @@ const DetailPage = () => {
     return result;
   };
 
-  // 상담 신청 버튼
+  // 나이 문자열 치환 함수
+  const getCleanAge = (age) => {
+    const result = age.replace(/(\d+)\((세|개월)\)/g, "$1$2 ");
+    return result;
+  };
+
+  // 상담 신청 버튼 prop
   const applyBtn = { title: "상담 신청하기" };
+
+  // const handleApplyConsult = (id) => {};
 
   return (
     <article>
@@ -38,7 +48,7 @@ const DetailPage = () => {
               <p>
                 종 / 품종 :{animal.SPCS}/{animal.BREEDS}
               </p>
-              <p>나이 : {animal.AGE}</p>
+              <p>나이 : {getCleanAge(animal.AGE)}</p>
               <p>체중 : {animal.BDWGH}</p>
             </div>
             <div>
