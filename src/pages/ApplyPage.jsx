@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
 import Calendar from "../components/Calender";
@@ -8,16 +8,22 @@ import Header from "../components/Header";
 import useToggle from "../hooks/useToggle";
 import { useNavigate } from "react-router-dom";
 import confetti from "https://esm.run/canvas-confetti@1";
+import { useDispatch, useSelector } from "react-redux";
+import { addApplyForm } from "../redux/modules/applyFormSlice";
 
 const FormConsultPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // 이름과 시간
-  const [userName, handleChangeName, setNameValue, nameRef] = useInput();
-  const [number, handleChangeNumber, setNumberValue, numberRef] = useInput();
+  // 상태
+  // 이름과 번호
+  const [userName, handleChangeName, , nameRef] = useInput();
+  const [number, handleChangeNumber, , numberRef] = useInput();
   const [userNameError, setUserNameError] = useState("");
   const [userNumberError, setUserNumberError] = useState("");
-
+  // 날짜와 시간
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
   // 모달창
   const [isOpen, handleOpenClick, setIsOpen] = useToggle();
 
@@ -26,21 +32,32 @@ const FormConsultPage = () => {
     window.history.back();
   };
 
-  // 상담신청 버튼 클릭시
+  // 상담신청 버튼 클릭 핸들러
   const handleApplyBtnClick = () => {
     if (!userName) {
       nameRef.current.focus();
       setUserNameError("이름을 입력하세요.");
       return;
-    } else if (!number) {
+    }
+    if (!number) {
       numberRef.current.focus();
       setUserNumberError("번호를 입력하세요.");
       return;
     }
+    if (!selectedDate) {
+      console.log("시간 선택 안함!");
+    }
+    const newApplyForm = {
+      name: userName,
+      date: selectedDate,
+      time: selectedTime,
+      phoneNumber: number,
+    };
+    dispatch(addApplyForm(newApplyForm));
     handleOpenClick();
   };
 
-  // 이름과 번호가 입력됨에 따라 에러메세지를 없애주기 위해 useEffect 사용했습니다.
+  // 입력창 에러 메세지 노출
   useEffect(() => {
     if (userName) {
       setUserNameError("");
@@ -51,6 +68,16 @@ const FormConsultPage = () => {
       setUserNumberError("");
     }
   }, [number]);
+
+  // Calendar 컴포넌트에서 선택한 날짜를 전달받음
+  const handleSelectDate = (date) => {
+    setSelectedDate(date);
+  };
+
+  // Select 컴포넌트에서 선택한 시간을 전달받음
+  const handleSelectTime = (time) => {
+    setSelectedTime(time);
+  };
 
   // 상담신청 완료 버튼 클릭시
   const handleCompleteBtnClick = () => {
@@ -81,8 +108,8 @@ const FormConsultPage = () => {
             {celebrate()}
             <h2>입양 상담 신청이 완료되었습니다!</h2>
             <p>{userName}님,</p>
-            <p>0월 0일</p>
-            <p>0시 00분</p>
+            <p>{selectedDate}</p>
+            <p>{selectedTime}</p>
             <p>약속 시간에 맞춰 방문 부탁드립니다.</p>
 
             <button onClick={handleCompleteBtnClick}>확인</button>
@@ -110,8 +137,8 @@ const FormConsultPage = () => {
                 </div>
               )}
             </div>
-            <Calendar />
-            <Select />
+            <Calendar handleSelectDate={handleSelectDate} />
+            <Select handleSelectTime={handleSelectTime} />
             <div>
               <label htmlFor="phone_number">번호 : </label>
               <input
@@ -120,9 +147,11 @@ const FormConsultPage = () => {
                 value={number}
                 onChange={handleChangeNumber}
                 type="text"
+                maxLength="11"
                 required
                 aria-describedby="numberInputError"
                 placeholder="번호를 입력하세요."
+                pattern="[0-9]{11}"
               />
               <div role="alert" id="timeInputError">
                 {userNumberError}
