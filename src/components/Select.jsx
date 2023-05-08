@@ -1,21 +1,22 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
-const Select = () => {
+const Select = ({ handleSelectTime }) => {
   const [isToggled, setIsToggled] = useState(false);
-  const [text, setText] = useState(".");
+  const [text, setText] = useState("시간을 선택하세요.");
 
   // li 클릭시 text 변경
   const handleClickLi = useCallback((e) => {
     setText((text) => e.target.innerText);
-    setIsToggled((text) => !text);
+    setIsToggled((isToggled) => !isToggled);
+    handleSelectTime(e.target.innerText);
   }, []);
 
   const handleBtnToggle = useCallback(() => {
-    setIsToggled((text) => !text);
+    setIsToggled((isToggled) => !isToggled);
   }, []);
 
-  const langList = [".", "1", "2", "3"];
+  const langList = ["09시 30분", "10시 30분", "14시 30분", "16시 30분"];
 
   return (
     <StContainer>
