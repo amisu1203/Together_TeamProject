@@ -1,27 +1,22 @@
-import React, { useEffect, useRef } from "react";
-import $ from "jquery";
-import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap CSS 파일 import
-import "bootstrap/dist/js/bootstrap";
-import "bootstrap-datepicker/dist/js/bootstrap-datepicker";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import "react-datepicker/dist/react-datepicker.css";
 
-const Calendar = () => {
-  const datepickerRef = useRef();
+const DatePickerForApply = ({ handleSelectDate }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  useEffect(() => {
-    $(datepickerRef.current).datepicker({
-      uiLibrary: "bootstrap4",
-      format: "yyyy-mm-dd",
-    });
-  }, []);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    handleSelectDate(moment(date).format("YYYY년 MM월 DD일"));
+  };
 
   return (
     <div>
-      <div className="form-group">
-        <label>날짜 : </label>
-        <input ref={datepickerRef} />
-      </div>
+      <p>날짜 : </p>
+      <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="yyyy년 MM월 dd일" />
     </div>
   );
 };
 
-export default Calendar;
+export default DatePickerForApply;
