@@ -16,7 +16,6 @@ const Button = ({ button, onClickHandle, isDisabled }) => {
 export default Button;
 
 const StBtn = styled.button`
-  /* display: inline-block; */
   width: 100%;
   border: none;
   border-bottom: 1px solid black;
