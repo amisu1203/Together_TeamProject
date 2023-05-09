@@ -52,7 +52,7 @@ const TitleListAnimal = () => {
               }
             }}
           >
-            {console.log("here", animal.images)}
+            {console.log("here", animal.images[0])}
             <StTitleImg src={`https://${animal.images[0].imageUrl}`} alt="동물 프로필 사진" />
             <StContainerInfo>
               <StTxtInfo>이름 : {animal.name}</StTxtInfo>
