@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import DetailPage from "./pages/DetailPage";
@@ -14,8 +14,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/api/detail/:id" element={<DetailPage />} />
           <Route path="/api/consulting" element={<ApplyPage />} />
-          <Route path="/api/consulting" element={<ApplyPage />} />
-          {/* <Route path="/api/post/consulting" element={<ApplyPage />} /> */}
           <Route path="/api/list" element={<ListPage />} />
         </Routes>
       </BrowserRouter>
@@ -45,7 +43,7 @@ const StContainer = styled.div`
   margin: 0 auto;
   max-width: 1200px;
   text-align: center;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
 `;
 const StA = styled.div`
   position: fixed;
@@ -54,7 +52,7 @@ const StA = styled.div`
   width: 100%;
   overflow: hidden;
   line-height: 0;
-  background-color: rgb(255 171 26 / 71%);
+  background-color: rgb(253 205 122 / 71%);
   height: 100vh;
   z-index: -1;
 `;
@@ -68,7 +66,6 @@ const StSvg = styled.svg`
 `;
 
 const StPath = styled.path`
-  /* fill: #f6f6ed; */
   fill: #f5f5f5;
 `;
 
