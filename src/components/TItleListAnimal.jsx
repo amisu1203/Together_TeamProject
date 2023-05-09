@@ -1,12 +1,12 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { useGetList, fetchAnimalPhotos } from "../hooks/useFetchs";
+import React, { useEffect, useMemo } from "react";
+import { useGetList } from "../hooks/useFetchs";
 import Button from "./Button";
 import styled from "styled-components";
 import dogFootPrint from "../img/footPrint.png";
 import { useNavigate } from "react-router-dom";
 
 const TitleListAnimal = () => {
-  const { animalList, dispatch } = useGetList();
+  const { animalList } = useGetList();
   const navigate = useNavigate();
 
   const shuffledList = useMemo(() => [...animalList].sort(() => Math.random() - 0.5), [animalList]);
@@ -34,7 +34,10 @@ const TitleListAnimal = () => {
   return (
     <main>
       <StMainTxt>
-        <StTitleTxt>함께하개</StTitleTxt>에서 평생의 행복을 함께할 가족을 찾아보세요.
+        <StTitleTxtContainer>
+          <StTitleTxt>함께하개</StTitleTxt>
+        </StTitleTxtContainer>
+        에서 평생의 행복을 함께할 가족을 찾아보세요.
       </StMainTxt>
       {selectedList.map((animal) => {
         return (
@@ -73,7 +76,6 @@ export default TitleListAnimal;
 
 const StContainer = styled.div`
   display: flex;
-  flex-direction: row;
   box-sizing: border-box;
   margin: 0 auto;
   margin-bottom: 20px;
@@ -94,15 +96,28 @@ const StContainer = styled.div`
 
 const StMainTxt = styled.h2`
   margin: 140px 0 40px;
+  font-size: 25px;
   font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: 30px;
   @media screen and (min-height: 980px) {
     margin-bottom: 90px;
   }
 `;
 
-const StTitleTxt = styled.span`
+const StTitleTxtContainer = styled.div`
+  margin-right: -7px;
+`;
+
+const StTitleTxt = styled.p`
   font-weight: 800;
+  font-size: 29px;
   color: #ffab1a;
+  background-color: transparents;
+  border: none;
+  width: 120px;
 `;
 
 const StTitleImg = styled.img`
