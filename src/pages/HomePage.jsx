@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import TitleListAnimal from "../components/TItleListAnimal";
 import Button from "../components/Button";
+import styled from "styled-components";
 
 const HomePage = () => {
   const signUpBtn = { title: "회원가입" };
@@ -9,8 +10,8 @@ const HomePage = () => {
   return (
     <div>
       <Header />
-      <Button button={signUpBtn} />
-      <Button button={loginBtn} />
+      {/* <Button button={signUpBtn} /> */}
+      {/* <Button button={loginBtn} /> */}
       <TitleListAnimal />
     </div>
   );
