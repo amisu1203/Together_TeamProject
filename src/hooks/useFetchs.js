@@ -19,6 +19,7 @@ export const useGetList = () => {
         // const listOfAnimal = data.TbAdpWaitAnimalView.row;
 
         // dispatch(setAnimalList(listOfAnimal));
+        dispatch(setAnimalList(data));
       } catch (error) {
         console.error(error);
       }
