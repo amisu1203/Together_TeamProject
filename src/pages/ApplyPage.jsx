@@ -7,7 +7,7 @@ import Select from "../components/Select";
 import Header from "../components/Header";
 import useToggle from "../hooks/useToggle";
 import { useNavigate } from "react-router-dom";
-import confetti from "https://esm.run/canvas-confetti@1";
+import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import { addApplyForm } from "../redux/modules/applyFormSlice";
 
