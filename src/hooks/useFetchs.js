@@ -18,7 +18,7 @@ export const useGetList = () => {
         // const { data } = await axiosInstance.get("/");
         // const listOfAnimal = data.TbAdpWaitAnimalView.row;
 
-        dispatch(setAnimalList(listOfAnimal));
+        // dispatch(setAnimalList(listOfAnimal));
       } catch (error) {
         console.error(error);
       }
