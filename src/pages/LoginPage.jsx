@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Cookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { getAnimals } from "../api/animal";
+// import { getAnimals } from "../api/animal";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/modules/auth";
 
