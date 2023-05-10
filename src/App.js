@@ -7,6 +7,7 @@ import ListPage from "./pages/ListPage";
 import ApplyPage from "./pages/ApplyPage";
 import LoginPage from "./pages/LoginPage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import SignUpPage from "./pages/SignUpPage";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/api/consulting" element={<ApplyPage />} />
             <Route path="/api/list" element={<ListPage />} />
             <Route path="/api/login" element={<LoginPage />} />
+            <Route path="/api/signup" element={<SignUpPage />} />
           </Routes>
         </BrowserRouter>
         <StA className="custom-shape-divider-top-1683407921">
