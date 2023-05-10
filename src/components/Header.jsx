@@ -1,13 +1,38 @@
 import React from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  // accessToken 가져오기
+  const { accessToken } = useSelector((state) => state.auth);
+
+  // 로그인 페이지 이동
+  const handleLoginBtnClick = () => {
+    navigate("/api/login");
+  };
+
+  // 회원가입 페이지 이동
+  const handleSignUpBtnClick = () => {
+    navigate("/api/signup");
+  };
+
   return (
     <StHeader>
       <Logo>함께하개</Logo>
-      {/* 기본 상태 - 회원가입/로그인 */}
-      {/* 로그인 상태 - 유저 정보 */}
+      <div>
+        {accessToken ? (
+          <>로그인됨</>
+        ) : (
+          <>
+            <button onClick={handleLoginBtnClick}>로그인</button>
+            <button onClick={handleSignUpBtnClick}>회원가입</button>
+          </>
+        )}
+      </div>
     </StHeader>
   );
 };
