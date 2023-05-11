@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGetList } from "../hooks/useFetchs";
 
 const AllListAnimal = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const AllListAnimal = () => {
   const [pets, setPets] = useState([]);
   const [page, setPage] = useState(0);
   const targetRef = useRef(null);
+  const { animalList } = useGetList();
   const limit = 5;
 
   // 필터 클릭 핸들러
@@ -49,14 +51,11 @@ const AllListAnimal = () => {
   useEffect(() => {
     const fetchData = async () => {
       const startIndex = page * limit;
-      // const res = await axios.get(`http://3.37.61.10/api/list?page=${page}&start=${startIndex}&limit=${limit}`);
-      const res = await axios.get(`http://3.37.61.10/api/list`);
-      const data = res.data;
       if (page === 1) {
-        setPets([...data].slice(0, limit));
+        setPets([...animalList].slice(0, limit));
       } else {
         setPets((prevPets) => {
-          const newData = data.filter((item) => !prevPets.find((pet) => pet.animalNo === item.animalNo));
+          const newData = animalList.filter((item) => !prevPets.find((pet) => pet.animalNo === item.animalNo));
           return [...prevPets, ...newData];
         });
       }
