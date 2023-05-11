@@ -52,7 +52,7 @@ const LoginPage = () => {
       </div>
       <div>
         <div>pw : </div>
-        <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
       <button onClick={handleLoginBtnClick}>로그인하기</button>
     </div>
