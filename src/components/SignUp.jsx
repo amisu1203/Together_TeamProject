@@ -12,7 +12,13 @@ const SignUp = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   // 쿼리 관련 코드
   const { isLoading, isError, data, mutate } = useQuery("signUpPost", signUp, {
-    enabled: false, // 이 플래그가 설정된 경우 쿼리가 자동으로 실행되지 않음
+    onSuccess: () => {
+      alert("회원가입이 완료되었습니다!");
+    },
+    onError: (error) => {
+      alert(`회원가입에 실패하였습니다. 오류 메시지: ${error}`);
+    },
+    enabled: false,
   });
 
   // 입력창 에러 메세지 노출
@@ -78,7 +84,14 @@ const SignUp = () => {
     };
     console.log(newUser);
     // mutate 함수를 사용하여 쿼리 실행
-    mutate(newUser);
+    mutate(newUser, {
+      onSuccess: () => {
+        alert("회원가입이 완료되었습니다!");
+      },
+      onError: (error) => {
+        alert(`회원가입에 실패하였습니다. 오류 메시지: ${error}`);
+      },
+    });
   };
 
   return (
