@@ -14,13 +14,13 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { mutate: mutateSignUp } = useMutation(signUp);
   // 쿼리 관련 코드
-  const { isLoading, isError, data } = useQuery("signUpPost", signUp, {
-    onSuccess: () => {
-      alert("회원가입이 완료되었습니다!");
-    },
-    onError: (error) => {
-      alert(`회원가입에 실패하였습니다. 오류 메시지: ${error}`);
-    },
+  const { isLoading, isError, data, error } = useQuery("signUpPost", signUp, {
+    // onSuccess: () => {
+    //   alert("회원가입이 완료되었습니다!");
+    // },
+    // onError: (error) => {
+    //   alert(`회원가입에 실패하였습니다. 오류 메시지: ${error}`);
+    // },
     enabled: false,
   });
 
@@ -80,20 +80,23 @@ const SignUp = () => {
       return;
     }
     const newUser = {
-      id,
+      username: id,
       password,
       admin: isAdmin,
       // adminToken: isAdmin ? "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC" : null,
     };
-    console.log(newUser);
 
     mutateSignUp(newUser, {
       onSuccess: () => {
-        navigate("/api/login");
-        alert("회원가입이 완료되었습니다!");
+        // alert("회원가입이 완료되었습니다!");
+        // navigate("/api/login");
       },
       onError: (error) => {
-        alert(`회원가입에 실패하였습니다. 오류 메시지: ${error}`);
+        !error.response.data.message
+          ? alert(`회원가입에 실패하였습니다. ${error.response.data}`)
+          : alert(`회원가입에 실패하였습니다. ${error.response.data.message}`);
+        // const message = error.response.data;
+        // console.log(message);
       },
     });
   };
