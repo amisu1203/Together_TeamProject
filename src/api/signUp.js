@@ -12,10 +12,10 @@ const signUp = async (newUser) => {
     const response = await axiosInstance.post("/api/signup", newUser, {
       withCredentials: true,
     });
-    return response.data.statusCode;
+    return response.data;
   } catch (error) {
-    console.error(error);
-    return error;
+    console.log("여기서", error.response.data);
+    throw error; // 에러를 다시 던집니다.
   }
 };
 
