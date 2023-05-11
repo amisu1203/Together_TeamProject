@@ -18,14 +18,10 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/api/login`,
-        {
-          userName: id,
-          password,
-        },
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${BASE_URL}/api/login`, {
+        username: id,
+        password,
+      });
 
       // 로그인 성공한 경우
       if (response.status === 200) {
