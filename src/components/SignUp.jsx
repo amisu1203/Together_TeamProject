@@ -241,6 +241,7 @@ const StSingUpBtn = styled.button`
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffffff;
   &:hover {
+    background: linear-gradient(to bottom, #ededed 5%, #b7ddeb 20%);
     background-color: #b7ddeb;
   }
 `;
