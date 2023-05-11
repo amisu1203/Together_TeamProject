@@ -5,13 +5,9 @@ import Button from "../components/Button";
 import styled from "styled-components";
 
 const HomePage = () => {
-  const signUpBtn = { title: "회원가입" };
-  const loginBtn = { title: "로그인" };
   return (
     <div>
       <Header />
-      {/* <Button button={signUpBtn} /> */}
-      {/* <Button button={loginBtn} /> */}
       <TitleListAnimal />
     </div>
   );
