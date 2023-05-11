@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import useInput from "../hooks/useInput";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { signUp } from "../api/signUp";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [id, handleChangeId, setId, idRef] = useInput();
@@ -10,8 +11,10 @@ const SignUp = () => {
   const [userNameError, setUserNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+  const { mutate: mutateSignUp } = useMutation(signUp);
   // 쿼리 관련 코드
-  const { isLoading, isError, data, mutate } = useQuery("signUpPost", signUp, {
+  const { isLoading, isError, data } = useQuery("signUpPost", signUp, {
     onSuccess: () => {
       alert("회원가입이 완료되었습니다!");
     },
@@ -79,13 +82,14 @@ const SignUp = () => {
     const newUser = {
       id,
       password,
-      isAdmin,
-      adminToken: isAdmin ? "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC" : null,
+      admin: isAdmin,
+      // adminToken: isAdmin ? "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC" : null,
     };
     console.log(newUser);
-    // mutate 함수를 사용하여 쿼리 실행
-    mutate(newUser, {
+
+    mutateSignUp(newUser, {
       onSuccess: () => {
+        navigate("/api/login");
         alert("회원가입이 완료되었습니다!");
       },
       onError: (error) => {
