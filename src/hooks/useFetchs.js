@@ -12,7 +12,7 @@ export const useGetList = () => {
   useEffect(() => {
     const getListOfAnimal = async () => {
       try {
-        const { data: listOfAnimal } = await axiosInstance.get("/api/list/");
+        const { data: listOfAnimal } = await axiosInstance.get("/api/list");
         // 공공 api 사용시 요청 로직
         // const { data } = await axiosInstance.get("/");
         // const listOfAnimal = data.TbAdpWaitAnimalView.row;
