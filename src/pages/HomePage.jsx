@@ -1,13 +1,14 @@
-import React from "react";
-import Header from "../components/Header";
+import React, { useEffect, useState } from "react";
 import TitleListAnimal from "../components/TItleListAnimal";
-import Button from "../components/Button";
-import styled from "styled-components";
+import Header from "../components/Header";
+import { useSelector } from "react-redux";
+import LoginPage from "./LoginPage";
 
 const HomePage = () => {
+  const userInfo = useSelector((state) => state.auth);
   return (
     <div>
-      <Header />
+      <Header userInfo={userInfo} />
       <TitleListAnimal />
     </div>
   );

@@ -4,18 +4,18 @@ import useInput from "../hooks/useInput";
 import Calendar from "../components/Calender";
 import Button from "../components/Button";
 import Select from "../components/Select";
-import Header from "../components/Header";
 import useToggle from "../hooks/useToggle";
 import { useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 import { useDispatch, useSelector } from "react-redux";
 import { addApplyForm } from "../redux/modules/applyFormSlice";
+import Header from "../components/Header";
 
 const FormConsultPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.auth);
 
-  // 상태
   // 이름과 번호
   const [userName, handleChangeName, , nameRef] = useInput();
   const [number, handleChangeNumber, , numberRef] = useInput();
@@ -99,7 +99,7 @@ const FormConsultPage = () => {
   const cancelApplyConsultBtn = { title: "이전으로" };
   return (
     <>
-      <Header />
+      <Header userInfo={userInfo} />
       {/* 이전으로 돌아가기 버튼은 오른쪽 상단으로 배치 예정 */}
       {!!isOpen ? (
         <>
@@ -118,7 +118,7 @@ const FormConsultPage = () => {
       ) : (
         <>
           <StForm onClick={(e) => e.preventDefault()}>
-            <h2>상담 신청페이지임</h2>
+            <h2>상담 신청 페이지</h2>
             <div>
               <label htmlFor="reservation_name">이름 : </label>
               <input

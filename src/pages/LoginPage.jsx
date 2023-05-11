@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Cookies } from "react-cookie";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/modules/auth";
+import { handleLogin } from "../api/animalListApi";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -12,36 +13,35 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("인증 안됨");
   const dispatch = useDispatch();
-  const BASE_URL = "http://3.37.61.10";
 
+  // 주소 처리하는 부분 바꾸기
+  const BASE_URL = "http://3.37.61.10:8080";
   const cookies = new Cookies();
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post(`${BASE_URL}/api/login`, {
-        username: id,
-        password,
-      });
+  // 쿼리 관련 코드
+  const { mutate: mutateHandleLogin } = useMutation(handleLogin);
+  const { isLoading, isError, data, error } = useQuery("loginPost", handleLogin, {
+    enabled: false,
+  });
 
-      // 로그인 성공한 경우
-      if (response.status === 200) {
-        const { accessToken, refreshToken } = response.data;
-
-        // Access Token 쿠키 생성 및 저장
-        cookies.set("ACCESS_KEY", accessToken, { path: "/" });
-
-        // Refresh Token 쿠키 생성 및 저장
-        cookies.set("REFRESH_KEY", refreshToken, { path: "/" });
-
-        // 로그인 액션 크리에이터를 호출
-        dispatch(login(response.data));
-        // 페이지 이동
+  // 로그인 했을 때
+  const handleLoginBtnClick = () => {
+    const user = {
+      username: id,
+      password,
+    };
+    mutateHandleLogin(user, {
+      onSuccess: () => {
+        alert("로그인이 완료되었습니다!");
+        dispatch(login(user));
         navigate("/");
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      },
+      onError: (error) => {
+        !error.response.data.message ? alert(`${error.response.data}`) : alert(`${error.response.data.message}`);
+      },
+    });
   };
+
   return (
     <div>
       <div>SignUpPage</div>
@@ -54,7 +54,7 @@ const LoginPage = () => {
         <div>pw : </div>
         <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
-      <button onClick={handleLogin}>로그인하기</button>
+      <button onClick={handleLoginBtnClick}>로그인하기</button>
     </div>
   );
 };

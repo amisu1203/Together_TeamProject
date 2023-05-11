@@ -8,6 +8,8 @@ import ApplyPage from "./pages/ApplyPage";
 import LoginPage from "./pages/LoginPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import SignUpPage from "./pages/SignUpPage";
+import Header from "./components/Header";
+import { useSelector } from "react-redux";
 
 const queryClient = new QueryClient();
 

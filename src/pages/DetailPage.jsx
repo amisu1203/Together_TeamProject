@@ -5,12 +5,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetList } from "../hooks/useFetchs";
 import Header from "../components/Header";
 import useToggle from "../hooks/useToggle";
+import { useSelector } from "react-redux";
 
 const DetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isToggled, handleToggle, setToggled] = useToggle();
   const { animalList, dispatch } = useGetList();
+  const userInfo = useSelector((state) => state.auth);
 
   // 동물 리스트 중 랜덤 3마리 뽑는 로직
   const selectedAnimal = animalList.filter((animal) => animal.animalNo === parseInt(id));
@@ -44,7 +46,7 @@ const DetailPage = () => {
 
   return (
     <div>
-      <Header />
+      <Header userInfo={userInfo} />
       <article>
         <StVisuallyHidden>유기 동물 상세페이지 입니다.</StVisuallyHidden>
         {selectedAnimal.map((animal) => {

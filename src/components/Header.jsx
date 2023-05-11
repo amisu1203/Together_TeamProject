@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/modules/auth";
 
-const Header = () => {
+const Header = ({ userInfo }) => {
   const navigate = useNavigate();
+  const [localUserInfo, setLocalUserInfo] = useState(null); // 로컬 상태로 유저 정보 저장
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 유저 정보 확인
+    const userInfoFromCookie = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfoFromCookie) {
+      setLocalUserInfo(userInfoFromCookie);
+    }
+  }, []);
 
   // accessToken 가져오기
   const { accessToken } = useSelector((state) => state.auth);
@@ -13,6 +24,13 @@ const Header = () => {
   // 로그인 페이지 이동
   const handleLoginBtnClick = () => {
     navigate("/api/login");
+  };
+
+  // 로그아웃
+  const handleLogoutBtnClick = () => {
+    dispatch(logout()); // 로그아웃 액션 디스패치
+    alert("로그아웃 되었습니다!");
+    navigate("/"); // 로그아웃 후 리다이렉트할 경로 설정
   };
 
   // 회원가입 페이지 이동
@@ -24,13 +42,16 @@ const Header = () => {
     <StHeader>
       <Logo>함께하개</Logo>
       <div>
-        {accessToken ? (
-          <>로그인됨</>
-        ) : (
+        {userInfo.user ? (
           <>
-            <button onClick={handleLoginBtnClick}>로그인</button>
-            <button onClick={handleSignUpBtnClick}>회원가입</button>
+            <StUserInfo>{`${userInfo.user.username}님 환영합니다!`}</StUserInfo>
+            <StLogoutBtn onClick={handleLogoutBtnClick}>로그아웃</StLogoutBtn>
           </>
+        ) : (
+          <StLogoutBtn>
+            <StLoginBtn onClick={handleLoginBtnClick}>로그인</StLoginBtn>
+            <StLoginBtn onClick={handleSignUpBtnClick}>회원가입</StLoginBtn>
+          </StLogoutBtn>
         )}
       </div>
     </StHeader>
@@ -54,4 +75,27 @@ const StHeader = styled.header`
   @media screen and (min-height: 1000px) {
     padding: 0 300px;
   }
+`;
+
+const StUserInfo = styled.div`
+  position: absolute;
+  right: 200px;
+  top: 10px;
+  padding: 10px;
+  border: 1px solid gray;
+`;
+
+const StLoginBtn = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+`;
+
+const StLogoutBtn = styled.button`
+  position: absolute;
+  right: 200px;
+  top: 60px;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
 `;
