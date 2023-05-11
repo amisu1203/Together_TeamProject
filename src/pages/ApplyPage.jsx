@@ -119,44 +119,46 @@ const FormConsultPage = () => {
         <>
           <StForm onClick={(e) => e.preventDefault()}>
             <h2>상담 신청 페이지</h2>
-            <div>
-              <label htmlFor="reservation_name">이름 : </label>
-              <input
-                ref={nameRef}
-                id="reservation_name"
-                value={userName}
-                onChange={handleChangeName}
-                type="text"
-                required
-                aria-describedby="nameInputError"
-                placeholder="이름을 입력하세요."
-              />
-              {!!userNameError && (
-                <div role="alert" id="nameInputError">
-                  {userNameError}
-                </div>
-              )}
-            </div>
-            <Calendar handleSelectDate={handleSelectDate} />
-            <Select handleSelectTime={handleSelectTime} />
-            <div>
-              <label htmlFor="phone_number">번호 : </label>
-              <input
-                ref={numberRef}
-                id="phone_number"
-                value={number}
-                onChange={handleChangeNumber}
-                type="text"
-                maxLength="11"
-                required
-                aria-describedby="numberInputError"
-                placeholder="번호를 입력하세요."
-                pattern="[0-9]{11}"
-              />
-              <div role="alert" id="timeInputError">
-                {userNumberError}
+            <StApplyBox>
+              <div>
+                <label htmlFor="reservation_name">이름 : </label>
+                <input
+                  ref={nameRef}
+                  id="reservation_name"
+                  value={userName}
+                  onChange={handleChangeName}
+                  type="text"
+                  required
+                  aria-describedby="nameInputError"
+                  placeholder="이름을 입력하세요."
+                />
+                {!!userNameError && (
+                  <div role="alert" id="nameInputError">
+                    {userNameError}
+                  </div>
+                )}
               </div>
-            </div>
+              <Calendar handleSelectDate={handleSelectDate} />
+              <Select handleSelectTime={handleSelectTime} />
+              <div>
+                <label htmlFor="phone_number">번호 : </label>
+                <input
+                  ref={numberRef}
+                  id="phone_number"
+                  value={number}
+                  onChange={handleChangeNumber}
+                  type="text"
+                  maxLength="11"
+                  required
+                  aria-describedby="numberInputError"
+                  placeholder="번호를 입력하세요."
+                  pattern="[0-9]{11}"
+                />
+                <div role="alert" id="timeInputError">
+                  {userNumberError}
+                </div>
+              </div>
+            </StApplyBox>
             <Button button={applyConsultBtn} onClickHandle={handleApplyBtnClick} />
           </StForm>
         </>
@@ -195,4 +197,11 @@ const StModal = styled.div`
   width: 500px;
   height: 300px;
   z-index: 999;
+`;
+
+const StApplyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
